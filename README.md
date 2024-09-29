@@ -1,2 +1,2 @@
-# personal-blog-node
-Personal Blog: Backend
+# Personal Blog: Back-end
+Personal blog created with nodejs
