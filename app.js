@@ -21,7 +21,7 @@ app.use(express.json());
 
 // Security
 // Secure HTTP Header
-app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 // Sanitize recieved request
 app.use(sanitize.middleware);
@@ -42,6 +42,8 @@ app.use(morgan("dev"));
 // app.use(morgan(":method :url :status :res[content-length] - :response-time ms"));
 
 // Routes
+app.use("/images", express.static("images"));
+
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 

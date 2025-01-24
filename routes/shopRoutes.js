@@ -1,12 +1,12 @@
 import express from "express";
 
-import { getProducts, getBrands } from "../controllers/products.js";
+import { getBrands, getProducts, getClothingTypes } from "../controllers/products.js";
 
 const router = express.Router();
 
 // should validate package size
-router.get("/products", getProducts);
 router.get("/brands", getBrands);
-// router.get("/all", getAllAirports);
+router.get("/products", getProducts);
+router.get("/types", getClothingTypes);
 
 export default router;
