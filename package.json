@@ -1,14 +1,41 @@
 {
-  "name": "personal-blog-node",
-  "version": "1.0.0",
-  "description": "Personal blog created with nodejs",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.21.0"
-  }
+    "name": "cyberpunk-tech-wear-shop-node",
+    "description": "Cyberpunk Tech Wear Shop is a showcase website project. This project is built with javascript framework. Stacks that are used in this project are React in frontend and node.js with express framwork connected to PostgreSQL database in backend.",
+    "version": "1.0.0",
+    "main": "app.js",
+    "type": "module",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "nodemon server.js"
+    },
+    "keywords": [],
+    "author": "13_0_0_111",
+    "license": "ISC",
+    "dependencies": {
+        "bcrypt": "^5.1.1",
+        "chalk": "^5.3.0",
+        "cors": "^2.8.5",
+        "crypto": "^1.0.1",
+        "dotenv": "^16.4.7",
+        "express": "^4.21.2",
+        "helmet": "^7.1.0",
+        "jsonwebtoken": "^9.0.2",
+        "lodash": "^4.17.21",
+        "moment": "^2.30.1",
+        "moment-timezone": "^0.5.45",
+        "morgan": "^1.10.0",
+        "nodemon": "^3.1.9",
+        "pg": "^8.12.0",
+        "sanitize": "^2.1.2",
+        "uuid": "^10.0.0",
+        "xss-clean": "^0.1.4"
+    },
+    "imports": {
+        "#config/*": "./src/config/*.js",
+        "#controllers/*": "./src/controllers/*.js",
+        "#modules/*": "./src/modules/*.js",
+        "#routes/*": "./src/routes/*.js",
+        "#middlewares/*": "./src/middlewares/*.js",
+        "#utils/*": "./src/utils/*.js"
+    }
 }
