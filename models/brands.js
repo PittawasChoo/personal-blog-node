@@ -1,9 +1,7 @@
 import { pool } from "../database/database.js";
 
-class Product {
+class Brand {
     constructor({}) {}
-
-    getAllProducts() {}
 
     static async getAllBrands() {
         const brands = await pool.query('SELECT * FROM "Brands"');
@@ -12,4 +10,4 @@ class Product {
     }
 }
 
-export default Product;
+export default Brand;

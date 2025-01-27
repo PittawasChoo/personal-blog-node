@@ -1,12 +1,26 @@
 import express from "express";
 
-import { getBrands, getProducts, getClothingTypes } from "../controllers/products.js";
+import {
+    getBrands,
+    getClothingTypes,
+    getNewArrival,
+    getProducts,
+    getPromotion,
+    getSizes,
+    getSortingOptions,
+} from "../controllers/products.js";
 
 const router = express.Router();
 
-// should validate package size
+// filter options
 router.get("/brands", getBrands);
-router.get("/products", getProducts);
 router.get("/types", getClothingTypes);
+router.get("/sizes", getSizes);
+router.get("/sorting-options", getSortingOptions);
+
+// get products
+router.post("/new-arrival", getNewArrival);
+router.post("/products", getProducts);
+router.post("/promotion", getPromotion);
 
 export default router;
