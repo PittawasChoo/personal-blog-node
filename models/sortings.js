@@ -15,7 +15,7 @@ const SORTING_OPTIONS = [
 class Sorting {
     constructor({}) {}
 
-    static getAllSortings() {
+    static getSortings() {
         return SORTING_OPTIONS;
     }
 
@@ -33,7 +33,11 @@ class Sorting {
         switch (sorting) {
             case "featured":
                 // TODO: order by featured
-                orderedProducts = productsWithTotalPrice;
+                orderedProducts = orderBy(
+                    productsWithTotalPrice,
+                    ["isFeatured", "releaseDate"],
+                    ["desc", "asc"]
+                );
                 break;
             case "nameAscending":
                 orderedProducts = orderBy(productsWithTotalPrice, "name", "asc");
@@ -55,7 +59,11 @@ class Sorting {
                 break;
             default:
                 // TODO: use featured sorting here
-                orderedProducts = productsWithTotalPrice;
+                orderedProducts = orderBy(
+                    productsWithTotalPrice,
+                    ["isFeatured", "releaseDate"],
+                    ["desc", "asc"]
+                );
                 break;
         }
 

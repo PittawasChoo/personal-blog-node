@@ -4,8 +4,10 @@ import {
     getBrands,
     getClothingTypes,
     getNewArrival,
+    getProduct,
     getProducts,
     getPromotion,
+    getRecommend,
     getSizes,
     getSortingOptions,
 } from "../controllers/products.js";
@@ -22,5 +24,7 @@ router.get("/sorting-options", getSortingOptions);
 router.post("/new-arrival", getNewArrival);
 router.post("/products", getProducts);
 router.post("/promotion", getPromotion);
+router.get("/recommend", getRecommend);
+router.post("/product", getProduct);
 
 export default router;

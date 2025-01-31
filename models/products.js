@@ -8,12 +8,20 @@ import { pool } from "../database/database.js";
 class Product {
     constructor({}) {}
 
-    static async getAllNewArrival(body) {
-        const { search = "", brands = [], sizes = [], types = [], sortBy = "", page = 1 } = body;
+    static async getNewArrival(body) {
+        const {
+            search = "",
+            brands = [],
+            sizes = [],
+            types = [],
+            sortBy = "",
+            page = 1,
+            limit = 0,
+        } = body;
 
         const products = await pool.query('SELECT * FROM "Products"');
 
-        const allBrands = await Brands.getAllBrands();
+        const allBrands = await Brands.getBrands();
         const rawProcuctsData = products.rows;
 
         const allProducts = rawProcuctsData.map((data) => {
@@ -75,6 +83,13 @@ class Product {
         // sort by 'sortBy'
         const sortedProducts = Sorting.sortProducts(productsFilteredByTypes, sortBy);
 
+        if (limit > 0) {
+            return {
+                currenPage: 1,
+                pageCount: 1,
+                products: sortedProducts.slice(0, limit),
+            };
+        }
         // pagination - 20 products/page
         const pageCount = Math.ceil(sortedProducts.length / 20);
         let currentPage = parseInt(page);
@@ -90,12 +105,20 @@ class Product {
         };
     }
 
-    static async getAllProducts(body) {
-        const { search = "", brands = [], sizes = [], types = [], sortBy = "", page = 1 } = body;
+    static async getProducts(body) {
+        const {
+            search = "",
+            brands = [],
+            sizes = [],
+            types = [],
+            sortBy = "",
+            page = 1,
+            limit = 0,
+        } = body;
 
         const products = await pool.query('SELECT * FROM "Products"');
 
-        const allBrands = await Brands.getAllBrands();
+        const allBrands = await Brands.getBrands();
         const rawProcuctsData = products.rows;
 
         const allProducts = rawProcuctsData.map((data) => {
@@ -141,6 +164,13 @@ class Product {
         // sort by 'sortBy'
         const sortedProducts = Sorting.sortProducts(productsFilteredByTypes, sortBy);
 
+        if (limit > 0) {
+            return {
+                currenPage: 1,
+                pageCount: 1,
+                products: sortedProducts.slice(0, limit),
+            };
+        }
         // pagination - 20 products/page
         const pageCount = Math.ceil(sortedProducts.length / 20);
         let currentPage = parseInt(page);
@@ -156,14 +186,22 @@ class Product {
         };
     }
 
-    static async getAllPromotion(body) {
-        const { search = "", brands = [], sizes = [], types = [], sortBy = "", page = 1 } = body;
+    static async getPromotion(body) {
+        const {
+            search = "",
+            brands = [],
+            sizes = [],
+            types = [],
+            sortBy = "",
+            page = 1,
+            limit = 0,
+        } = body;
 
         const products = await pool.query(
             'SELECT * FROM "Products" WHERE "promotionPrice" IS NOT NULL;'
         );
 
-        const allBrands = await Brands.getAllBrands();
+        const allBrands = await Brands.getBrands();
         const rawProcuctsData = products.rows;
 
         const allProducts = rawProcuctsData.map((data) => {
@@ -209,6 +247,13 @@ class Product {
         // sort by 'sortBy'
         const sortedProducts = Sorting.sortProducts(productsFilteredByTypes, sortBy);
 
+        if (limit > 0) {
+            return {
+                currenPage: 1,
+                pageCount: 1,
+                products: sortedProducts.slice(0, limit),
+            };
+        }
         // pagination - 20 products/page
         const pageCount = Math.ceil(sortedProducts.length / 20);
         let currentPage = parseInt(page);
@@ -222,6 +267,57 @@ class Product {
             pageCount,
             products: productsInPage,
         };
+    }
+
+    static async getRecommendProducts() {
+        const products = await pool.query(
+            'SELECT * FROM "Products"WHERE "isFeatured" = true LIMIT 4;'
+        );
+
+        const allBrands = await Brands.getBrands();
+        const rawProcuctsData = products.rows;
+
+        const allProducts = rawProcuctsData.map((data) => {
+            return {
+                ...data,
+                brand: allBrands.find((brand) => brand.id === data.brandId).name,
+            };
+        });
+
+        return {
+            products: allProducts,
+        };
+    }
+
+    static async getProduct(body) {
+        const { id } = body;
+
+        if (!id) {
+            throw new Error("Product id is not provided");
+        }
+
+        const productQuery = `
+            SELECT * FROM "Products"
+            WHERE "id" = $1;
+        `;
+        const product = await pool.query(productQuery, [id]);
+
+        const rawProcuctData = product.rows;
+
+        if (rawProcuctData.length === 0) {
+            throw new Error("Product is not found");
+        }
+
+        const allBrands = await Brands.getBrands();
+        const stock = await Stock.getProductStock(rawProcuctData[0].id);
+
+        const enhancedProduct = {
+            ...rawProcuctData[0],
+            brand: allBrands.find((brand) => brand.id === rawProcuctData[0].brandId).name,
+            stock,
+        };
+
+        return enhancedProduct;
     }
 }
 
