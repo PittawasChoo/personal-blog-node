@@ -12,6 +12,7 @@ import { connectDB } from "./database/database.js";
 import { PORT } from "./config/config.js";
 
 import adminRoutes from "./routes/adminRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 import shopRoutes from "./routes/shopRoutes.js";
 
 const app = express();
@@ -46,6 +47,7 @@ app.use("/images", express.static("images"));
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
+app.use(authRoutes);
 
 // Error handling middleware
 // app.use(errorMiddleware);

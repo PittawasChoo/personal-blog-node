@@ -9,6 +9,3 @@ export const POOL_CONFIG = {
 };
 
 export const JWT_ENCRYPTION_KEY = process.env.JWT_ENCRYPTION_KEY;
-export const CONTACT_ENCRYPTION_KEY = process.env.CONTACT_ENCRYPTION_KEY;
-export const PASSENGER_ENCRYPTION_KEY = process.env.PASSENGER_ENCRYPTION_KEY;
-export const PAYMENT_ENCRYPTION_KEY = process.env.PAYMENT_ENCRYPTION_KEY;
