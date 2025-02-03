@@ -28,6 +28,18 @@ const getProducts = async (req, res, next) => {
     res.status(200).send(products);
 };
 
+const getProductsFromIds = async (req, res, next) => {
+    const { ids } = req.body;
+    try {
+        const product = await Products.getProductFromIds(ids);
+        res.status(200).send(product);
+    } catch (error) {
+        console.log(chalk.red(`Error: Cannot get product`));
+        console.log("error", error.message);
+        res.status(404).json({ error });
+    }
+};
+
 const getPromotion = async (req, res, next) => {
     const body = req.body;
     const products = await Products.getPromotion(body);
@@ -50,13 +62,12 @@ const getRecommend = async (req, res, next) => {
 };
 
 const getProduct = async (req, res, next) => {
-    const body = req.body;
+    const { id } = req.body;
     try {
-        const product = await Products.getProduct(body);
+        const product = await Products.getProductFromIds([id]);
         res.status(200).send(product);
     } catch (error) {
         console.log(chalk.red(`Error: Cannot get product`));
-        console.log("error", error);
         console.log("error", error.message);
         res.status(404).json({ error });
     }
@@ -72,4 +83,5 @@ export {
     getRecommend,
     getSizes,
     getSortingOptions,
+    getProductsFromIds,
 };

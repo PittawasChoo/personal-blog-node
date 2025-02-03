@@ -6,6 +6,7 @@ import {
     getNewArrival,
     getProduct,
     getProducts,
+    getProductsFromIds,
     getPromotion,
     getRecommend,
     getSizes,
@@ -26,5 +27,8 @@ router.post("/products", getProducts);
 router.post("/promotion", getPromotion);
 router.get("/recommend", getRecommend);
 router.post("/product", getProduct);
+
+// get cart
+router.post("/cart", getProductsFromIds);
 
 export default router;

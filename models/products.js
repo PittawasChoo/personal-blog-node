@@ -289,18 +289,15 @@ class Product {
         };
     }
 
-    static async getProduct(body) {
-        const { id } = body;
-
-        if (!id) {
+    static async getProductFromIds(ids = []) {
+        if (ids.length === 0) {
             throw new Error("Product id is not provided");
         }
 
-        const productQuery = `
-            SELECT * FROM "Products"
-            WHERE "id" = $1;
-        `;
-        const product = await pool.query(productQuery, [id]);
+        const uniqueProductIds = Array.from(new Set(ids));
+
+        const productQuery = `SELECT * FROM "Products" WHERE "id" = ANY($1)`;
+        const product = await pool.query(productQuery, [uniqueProductIds]);
 
         const rawProcuctData = product.rows;
 
@@ -309,13 +306,18 @@ class Product {
         }
 
         const allBrands = await Brands.getBrands();
-        const stock = await Stock.getProductStock(rawProcuctData[0].id);
 
-        const enhancedProduct = {
-            ...rawProcuctData[0],
-            brand: allBrands.find((brand) => brand.id === rawProcuctData[0].brandId).name,
-            stock,
-        };
+        const enhancedProduct = await Promise.all(
+            rawProcuctData.map(async (product) => {
+                const stock = await Stock.getProductStock(product.id);
+
+                return {
+                    ...product,
+                    brand: allBrands.find((brand) => brand.id === product.brandId).name,
+                    stock,
+                };
+            })
+        );
 
         return enhancedProduct;
     }

@@ -2,7 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 import { JWT_ENCRYPTION_KEY } from "../config/config.js";
-import { findUserByEmail, registerUser } from "../models/users.js";
+import { findUserByEmail, registerUser, findUserById } from "../models/users.js";
 
 const login = async (req, res, next) => {
     try {
@@ -17,11 +17,25 @@ const login = async (req, res, next) => {
         if (!isMatch) return res.status(400).json({ error: "Invalid email or password" });
 
         // Generate JWT
-        const token = jwt.sign({ userId: user.id }, JWT_ENCRYPTION_KEY, { expiresIn: "1h" });
+        const token = jwt.sign({ userId: user.id }, JWT_ENCRYPTION_KEY);
 
         res.status(200).json({ message: "Login successful", token });
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+};
+
+const profile = async (req, res, next) => {
+    try {
+        const { userId } = req.body;
+        const user = await findUserById(userId);
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
 };
 
@@ -42,4 +56,4 @@ const register = async (req, res, next) => {
     }
 };
 
-export { login, register };
+export { login, profile, register };
