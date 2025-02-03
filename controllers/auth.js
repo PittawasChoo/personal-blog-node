@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import chalk from "chalk";
 import jwt from "jsonwebtoken";
 
 import { JWT_ENCRYPTION_KEY } from "../config/config.js";
@@ -21,7 +22,9 @@ const login = async (req, res, next) => {
 
         res.status(200).json({ message: "Login successful", token });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.log(chalk.red(`Error: Cannot login`));
+        console.log(error.message);
+        res.status(404).json({ message: "Cannot login" });
     }
 };
 
@@ -34,7 +37,8 @@ const profile = async (req, res, next) => {
         }
         res.status(200).json(user);
     } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.log(chalk.red(`Error: Cannot fetch user data`));
+        console.log(error.message);
         res.status(500).json({ message: "Internal Server Error" });
     }
 };
@@ -52,7 +56,9 @@ const register = async (req, res, next) => {
         );
         res.status(201).json({ message: "Register successful" });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        console.log(chalk.red(`Error: Cannot get user data`));
+        console.log(error.message);
+        res.status(404).json({ message: "Cannot get user data" });
     }
 };
 
