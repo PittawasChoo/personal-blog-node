@@ -28,7 +28,6 @@ export const sortProducts = (products, sorting) => {
 
     switch (sorting) {
         case "featured":
-            // TODO: order by featured
             orderedProducts = orderBy(
                 productsWithTotalPrice,
                 ["isFeatured", "releaseDate"],
@@ -54,7 +53,6 @@ export const sortProducts = (products, sorting) => {
             orderedProducts = orderBy(productsWithTotalPrice, "releaseDate", "desc");
             break;
         default:
-            // TODO: use featured sorting here
             orderedProducts = orderBy(
                 productsWithTotalPrice,
                 ["isFeatured", "releaseDate"],
