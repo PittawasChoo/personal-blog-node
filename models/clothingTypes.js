@@ -1,13 +1,21 @@
 import { pool } from "../database/database.js";
 
-class ClothingType {
-    constructor({}) {}
+const createClothingTypesTable = async () => {
+    const query = `
+        CREATE TABLE IF NOT EXISTS public."ClothingTypes"
+        (
+            id uuid NOT NULL,
+            name character varying(50) COLLATE pg_catalog."default",
+            CONSTRAINT clothingtypes_pkey PRIMARY KEY (id)
+        )
+    `;
+    await pool.query(query);
+};
 
-    static async getClothingTypes() {
-        const clothingTypes = await pool.query('SELECT * FROM "ClothingTypes"');
+createClothingTypesTable();
 
-        return clothingTypes.rows;
-    }
-}
+export const getClothingTypes = async () => {
+    const clothingTypes = await pool.query('SELECT * FROM "ClothingTypes"');
 
-export default ClothingType;
+    return clothingTypes.rows;
+};

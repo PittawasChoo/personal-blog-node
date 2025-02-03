@@ -12,65 +12,58 @@ const SORTING_OPTIONS = [
     { label: "Oldest", key: "dateDescending" },
 ];
 
-class Sorting {
-    constructor({}) {}
+export const getSortings = () => {
+    return SORTING_OPTIONS;
+};
 
-    static getSortings() {
-        return SORTING_OPTIONS;
+export const sortProducts = (products, sorting) => {
+    const productsWithTotalPrice = products.map((product) => {
+        return {
+            ...product,
+            finalPrice: Number(product.promotionPrice || product.price),
+        };
+    });
+
+    let orderedProducts = [];
+
+    switch (sorting) {
+        case "featured":
+            // TODO: order by featured
+            orderedProducts = orderBy(
+                productsWithTotalPrice,
+                ["isFeatured", "releaseDate"],
+                ["desc", "asc"]
+            );
+            break;
+        case "nameAscending":
+            orderedProducts = orderBy(productsWithTotalPrice, "name", "asc");
+            break;
+        case "nameDescending":
+            orderedProducts = orderBy(productsWithTotalPrice, "name", "desc");
+            break;
+        case "priceAscending":
+            orderedProducts = orderBy(productsWithTotalPrice, "finalPrice", "asc");
+            break;
+        case "priceDescending":
+            orderedProducts = orderBy(productsWithTotalPrice, "finalPrice", "desc");
+            break;
+        case "dateAscending":
+            orderedProducts = orderBy(productsWithTotalPrice, "releaseDate", "asc");
+            break;
+        case "dateDescending":
+            orderedProducts = orderBy(productsWithTotalPrice, "releaseDate", "desc");
+            break;
+        default:
+            // TODO: use featured sorting here
+            orderedProducts = orderBy(
+                productsWithTotalPrice,
+                ["isFeatured", "releaseDate"],
+                ["desc", "asc"]
+            );
+            break;
     }
 
-    // TODO: order by featured
-    static sortProducts(products, sorting) {
-        const productsWithTotalPrice = products.map((product) => {
-            return {
-                ...product,
-                finalPrice: Number(product.promotionPrice || product.price),
-            };
-        });
+    delete orderedProducts["finalPrice"];
 
-        let orderedProducts = [];
-
-        switch (sorting) {
-            case "featured":
-                // TODO: order by featured
-                orderedProducts = orderBy(
-                    productsWithTotalPrice,
-                    ["isFeatured", "releaseDate"],
-                    ["desc", "asc"]
-                );
-                break;
-            case "nameAscending":
-                orderedProducts = orderBy(productsWithTotalPrice, "name", "asc");
-                break;
-            case "nameDescending":
-                orderedProducts = orderBy(productsWithTotalPrice, "name", "desc");
-                break;
-            case "priceAscending":
-                orderedProducts = orderBy(productsWithTotalPrice, "finalPrice", "asc");
-                break;
-            case "priceDescending":
-                orderedProducts = orderBy(productsWithTotalPrice, "finalPrice", "desc");
-                break;
-            case "dateAscending":
-                orderedProducts = orderBy(productsWithTotalPrice, "releaseDate", "asc");
-                break;
-            case "dateDescending":
-                orderedProducts = orderBy(productsWithTotalPrice, "releaseDate", "desc");
-                break;
-            default:
-                // TODO: use featured sorting here
-                orderedProducts = orderBy(
-                    productsWithTotalPrice,
-                    ["isFeatured", "releaseDate"],
-                    ["desc", "asc"]
-                );
-                break;
-        }
-
-        delete orderedProducts["finalPrice"];
-
-        return orderedProducts;
-    }
-}
-
-export default Sorting;
+    return orderedProducts;
+};

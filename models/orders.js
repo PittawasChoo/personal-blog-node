@@ -1,7 +1,7 @@
 import lodash from "lodash";
 import { v4 as uuid } from "uuid";
 
-import Products from "../models/products.js";
+import { getProductFromIds } from "../models/products.js";
 import { pool } from "../database/database.js";
 
 const { isEmpty } = lodash;
@@ -34,7 +34,7 @@ export const purchase = async (products, customerDetail, shippingDetail, userId)
     const allProdutIds = products.map((product) => product.id);
     const uniqueProductIds = Array.from(new Set(allProdutIds));
 
-    const allProductData = await Products.getProductFromIds(uniqueProductIds);
+    const allProductData = await getProductFromIds(uniqueProductIds);
 
     const enhancedProduct = products.map((product) => ({
         ...product,
