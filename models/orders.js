@@ -55,6 +55,18 @@ export const purchase = async (products, customerDetail, shippingDetail, userId)
         return acc + amount;
     }, 0);
 
+    await Promise.all(
+        products.map(async (product) => {
+            const query = `
+          UPDATE "Stock"
+          SET "stock" = stock - $1
+          WHERE "productId" = $2 AND size = $3;
+        `;
+            const values = [product.quantity, product.id, product.size];
+            await pool.query(query, values);
+        })
+    );
+
     const query = `
       INSERT INTO public."Orders"(
         id, products, "totalPrice", "customerInfo", "shippingInfo", "userId", "timestamp")
