@@ -25,6 +25,14 @@ const createOrdersTable = async () => {
 
 createOrdersTable();
 
+export const history = async (userId) => {
+    const historyQuery = `SELECT * FROM "Orders" WHERE "userId" = $1`;
+    const historyData = await pool.query(historyQuery, [userId]);
+
+    const history = historyData.rows;
+    return history;
+};
+
 export const purchase = async (products, customerDetail, shippingDetail, userId) => {
     // Check for empty values
     if (products.length === 0 || isEmpty(customerDetail) || isEmpty(shippingDetail) || !userId) {

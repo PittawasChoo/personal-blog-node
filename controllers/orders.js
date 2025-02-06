@@ -1,6 +1,18 @@
 import chalk from "chalk";
 
-import { purchase } from "../models/orders.js";
+import { history, purchase } from "../models/orders.js";
+
+const getHistory = async (req, res, next) => {
+    try {
+        const { userId } = req.body;
+        const orderHistory = await history(userId);
+        res.status(201).json({ history: orderHistory });
+    } catch (error) {
+        console.log(chalk.red(`Error: Cannot get history`));
+        console.log(error.message);
+        res.status(400).json({ message: "Cannot get history" });
+    }
+};
 
 const postPurchase = async (req, res, next) => {
     try {
@@ -14,4 +26,4 @@ const postPurchase = async (req, res, next) => {
     }
 };
 
-export { postPurchase };
+export { postPurchase, getHistory };
