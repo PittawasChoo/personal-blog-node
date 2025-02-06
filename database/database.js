@@ -1,6 +1,8 @@
 import pg from "pg";
 import { POOL_CONFIG } from "../config/config.js";
 
+console.log("POOL_CONFIG", POOL_CONFIG);
+
 const { Pool } = pg;
 
 const pool = new Pool(POOL_CONFIG);
