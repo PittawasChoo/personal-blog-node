@@ -1,11 +1,17 @@
 import pg from "pg";
 
+import { NODE_ENV, POOL_CONFIG } from "../config/config.js";
+
 const { Pool } = pg;
 
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
-    ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
-});
+const pool = new Pool(
+    NODE_ENV === "production"
+        ? {
+              connectionString: process.env.DATABASE_URL,
+              ssl: { rejectUnauthorized: false },
+          }
+        : POOL_CONFIG
+);
 
 const connectDB = async () => {
     try {
